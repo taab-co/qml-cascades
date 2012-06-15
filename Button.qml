@@ -16,7 +16,7 @@ Item {
         color: "#0B0B0B"
         anchors.margins: 20
         border.color: "#333333"
-        border.width: 4
+        border.width: 2
         height: container.height - 40
         width: container.width - 40
         anchors.centerIn: container
@@ -26,11 +26,11 @@ Item {
             id: btn
             border.width: 1
             radius: 5
-            height: btnContainer.height - 6
-            width: btnContainer.width - 6
+            height: btnContainer.height - 15
+            width: btnContainer.width - 15
             border.color: "#5C5C5C"
-            x: 2
-            y: 2.5
+            x: 7.5
+            y: 7
             gradient: Gradient {
                 GradientStop { position: 0.0; color: "#3F3F3F" }
                 GradientStop { position: 1.0; color: "#262626" }
@@ -41,11 +41,11 @@ Item {
             id: pressed
             border.width: 1
             radius: 5
-            height: btnContainer.height - 6
-            width: btnContainer.width - 6
             border.color: "#53514F"
-            x: 2
-            y: 2.5
+            height: btnContainer.height - 15
+            width: btnContainer.width - 15
+            x: 7.5
+            y: 7
             opacity: 0
             gradient: Gradient {
                 GradientStop { position: 1.0; color: "#00A8DF" }
