@@ -14,6 +14,7 @@ Item {
         x: 10
         y: 10
         source: 'radiocontainer.png'
+        smooth: true
     }
     
     Rectangle {
@@ -24,6 +25,7 @@ Item {
         x: 19
         y: 19
         color: 'transparent'
+        smooth: true
         gradient:
             Gradient {
                 GradientStop { id: dotStop1; position: 0.0; color: "#00000000" }
@@ -36,6 +38,7 @@ Item {
             width: 18
             radius: 9
             color: 'white'
+            smooth: true
             opacity: 0
             y: 11
             x: 11
@@ -61,4 +64,13 @@ Item {
             PropertyChanges { target: centerDot; color: "#666666" }
         }
     ] 
+    
+    transitions: [
+        Transition {
+            to: "Checked"
+            NumberAnimation { target: centerDot; properties: "width,height"; from: 0; to: 18; }
+            NumberAnimation { target: centerDot; properties: "radius"; from: 0; to: 9; }
+            NumberAnimation { target: centerDot; properties: "x,y"; from: 20; to: 11; }
+        }
+    ]
 }
