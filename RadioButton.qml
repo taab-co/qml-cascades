@@ -5,23 +5,27 @@ Item {
 
     signal clicked
 
-    property string text
-    property bool disabled;
-    property bool checked;
+    property alias text: btnText.text
+    property alias checked: checkable.checked;
+    property alias platformExclusiveGroup: checkable.exclusiveGroup
+    property bool enabled: true;
     
     width: 350
-    height: 120
+    height: 100
     
-    Radio { id: radioCircle }
+    Radio { 
+        id: radioCircle 
+        anchors.right: container.right
+    }
     
     MouseArea {
         id: mouseRegion
         anchors.fill: container
         onClicked: { 
-            if (container.disabled == false)
+            if (container.enabled == true)
             {
                 container.clicked()
-                container.checked = true
+                checkable.toggle()
             }
         }
     }
@@ -29,29 +33,35 @@ Item {
     Text {
         id: btnText
         color: "#FFFFFF"
-        anchors.left: radioCircle.right
+        anchors.left: container.left
+        anchors.leftMargin: 20
         anchors.verticalCenter: radioCircle.verticalCenter
-        text: container.text
-        font.pointSize: 28
+        font.pointSize: 38
         font.family: "Slate"
     }
 
     states: [
         State {
             name: "Pressed"
-            when: mouseRegion.pressed == true && container.disabled == false
+            when: mouseRegion.pressed == true && container.enabled == true
             PropertyChanges { target: radioCircle; pressed: true }
         }, 
         State {
             name: "Checked"
-            when: container.checked == true && container.disabled == false
+            when: container.checked == true && container.enabled == true
             PropertyChanges { target: radioCircle; checked: true }
         }, 
         State {
             name: "Disabled"
-            when: container.disabled == true
+            when: container.enabled == false
             PropertyChanges { target: disabled; opacity: 1 }
             PropertyChanges { target: btnText; color: "#666666" }
         }
     ] 
+
+    Checkable {
+        id: checkable
+        value: btnText.text
+        enabled: true
+    }
 }
