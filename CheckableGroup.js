@@ -132,10 +132,30 @@ function check(item) {
     // It is important to have the right item in the 'selectedItem'
     // before the changes since we use that to identify that the change
     // was made by us.
-    var oldSelectedItem = selectedItem
+    var oldSelectedItem = selectedItem;
     selectedItem = item;
-    if (oldSelectedItem)
+    var idx = (items.indexOf(selectedItem) + 1);
+    console.log("Index: " + idx);
+    if (oldSelectedItem) {
+        var oldIdx = (items.indexOf(oldSelectedItem) + 1);
+        console.log("Old Index: " + oldIdx);
+        if (oldIdx < idx) {
+            selectedItem.slideUp = false;
+            oldSelectedItem.slideUp = true;
+        }
+        else if (oldIdx > idx) {
+            selectedItem.slideUp = true;
+            oldSelectedItem.slideUp = false;
+        }
+        else {
+            selectedItem.slideUp = false;
+            oldSelectedItem.slideUp = false;
+        }
         oldSelectedItem.checked = false;
+    }
+    else {
+        selectedItem.slideUp = false;
+    }
     item.checked = true;
     root.selectedValue = item.value;
 }

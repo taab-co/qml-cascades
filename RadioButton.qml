@@ -8,6 +8,7 @@ Item {
     property alias text: btnText.text
     property alias checked: checkable.checked;
     property alias platformExclusiveGroup: checkable.exclusiveGroup
+    property alias slideUp: checkable.slideUp
     property bool enabled: true;
     
     width: 350
@@ -16,6 +17,7 @@ Item {
     Radio { 
         id: radioCircle 
         anchors.right: container.right
+        slideUp: container.slideUp
     }
     
     MouseArea {

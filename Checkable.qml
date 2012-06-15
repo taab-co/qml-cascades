@@ -46,6 +46,7 @@ QtObject {
     property variant value: null
     property QtObject exclusiveGroup: null
     property bool enabled: false
+    property bool slideUp: true
 
     onEnabledChanged: {
         if (!enabled) {
