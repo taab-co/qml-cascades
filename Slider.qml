@@ -3,9 +3,42 @@ import "effects"
 
 Item {
     id: container
-    height: 75
-    width: 768
+
+    property variant value: 0;
+
+    property alias minimumValue: rangeModel.minimumValue
+    property alias maximumValue: rangeModel.maximumValue
+    property alias stepSize: rangeModel.stepSize
     
+    property alias inverted: rangeModel.inverted
+    property bool updateValueWhileDragging: true
+    property alias pressed: indicatorMouseArea.pressed
+    property bool useDecimals: false
+    
+    function formatValue(v) {
+        if (parseInt(v) != v)
+            useDecimals = true;
+    
+        return useDecimals ? (v.toFixed(2)) : v;
+    }
+
+    height: 75
+    width: parent.width
+
+    RangeModel {
+        id: rangeModel
+        minimumValue: 0.0
+        maximumValue: 1.0
+        stepSize: 0
+
+        inverted: false
+        positionAtMinimum: 0
+        positionAtMaximum: track.width - indicator.width
+        onMaximumValueChanged: useDecimals = false;
+        onMinimumValueChanged: useDecimals = false;
+        onStepSizeChanged: useDecimals = false;
+    }
+
     Rectangle {
         id: track
         radius: 17
@@ -42,13 +75,13 @@ Item {
             border.color: "#595959"
             anchors.verticalCenter: parent.verticalCenter
             smooth: true
-            x: 234
             z: 2
             gradient: 
                 Gradient {
                     GradientStop { position: 0.0; color: "#3F3F3F" }
                     GradientStop { position: 1.0; color: "#262626" }
                 }
+            onXChanged: container.value = container.formatValue(rangeModel.valueForPosition(indicator.x));
         }
         
         Rectangle {
@@ -91,9 +124,19 @@ Item {
             width: indicator.width * 2.5
             height: indicator.height * 2.5
             drag.target: indicator
-            drag.axis: Drag.XAxis
+            drag.axis: Drag.XandYAxis
             drag.minimumX: 0
             drag.maximumX: track.width - indicator.width
+
+            onPressed: {
+                var newX = mouse.x - indicator.width/2;
+                if (Math.abs(newX - indicator.x) > indicator.width/2)
+                    rangeModel.position = newX;
+            }
+
+            onReleased: {
+                rangeModel.position = indicator.x
+            }
 
             onPositionChanged: indicator.x
         }
