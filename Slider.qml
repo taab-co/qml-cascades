@@ -1,8 +1,9 @@
 import QtQuick 1.1
+import "effects"
 
 Item {
     id: container
-    height: 50
+    height: 75
     width: 768
     
     Rectangle {
@@ -51,25 +52,44 @@ Item {
         }
         
         Rectangle {
+            id: indicatorActive
+            width: indicator.width
+            height: indicator.height
+            radius: indicator.radius
+            border.width: indicator.border.width
+            border.color: "black"
+            smooth: true
+            anchors.centerIn: indicator
+            opacity: 0
+            color: "#00A8DF"
+            z: 3
+        }
+        
+        Rectangle {
             id: halo
             width: 100
             height: 100
             radius: 50
+            color: 'black'
             anchors.centerIn: indicator
-            opacity: 0
-            gradient: 
-                Gradient {
-                    GradientStop { position: 0.0; color: "#2600A8DF" }
-                    GradientStop { position: 0.8; color: "#2600A8DF" }
-                    GradientStop { position: 1.0; color: "#B300A8DF" }
+            opacity: 1.0
+            scale: 0.01
+            RadialGradient {
+                anchors.fill: parent
+                source: halo
+                gradient: Gradient {
+                    GradientStop { position: 1.0; color: "#00000000" }
+                    GradientStop { position: 0.1; color: "#00A8DF" }
+                    GradientStop { position: 0.0; color: "#00A8DF" }
                 }
+            }
         }
                     
         MouseArea {
             id: indicatorMouseArea
             anchors.centerIn: indicator
-            width: indicator.width * 1.5
-            height: indicator.height * 1.5
+            width: indicator.width * 2.5
+            height: indicator.height * 2.5
             drag.target: indicator
             drag.axis: Drag.XAxis
             drag.minimumX: 0
@@ -82,8 +102,26 @@ Item {
         State {
             name: "Pressed"
             when: indicatorMouseArea.pressed == true
-            PropertyChanges { target: halo; opacity: 1.0 }
         }
     ] 
+    
+    transitions: [
+        Transition {
+            from: ""
+            to: "Pressed"
+            ParallelAnimation {
+                PropertyAction { target: indicatorActive; property: "opacity"; value: "1"}
+                NumberAnimation { target: halo; properties: "scale"; from: 0; to: 1; easing.type: Easing.OutBack; easing.overshoot: 2.0; duration: 300}
+            }
+        },
+        Transition {
+            from: "Pressed"
+            to: ""
+            ParallelAnimation {
+                PropertyAction { target: indicatorActive; property: "opacity"; value: "0"}
+                NumberAnimation { target: halo; properties: "scale"; to: 0; from: 1; easing.type: Easing.InBack; easing.overshoot: 2.0; duration: 300}
+            }
+        }
+    ]
 }
 
